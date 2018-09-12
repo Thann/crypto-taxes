@@ -16,9 +16,9 @@ const importCsv = require('./lib/import-csv');
 
 const config = new Config('crypto-taxes', {
   alias: {
-    'i': 'import',
-    'o': 'output',
-    'r': 'report',
+    i: 'import',
+    o: 'output',
+    r: 'report'
   }
 });
 
@@ -31,18 +31,21 @@ if (!config.has('output')) {
 }
 
 (async () => {
-  let outFile = '';
+  let outFile;
   if (fs.existsSync(config.str('output'))) {
     outFile = fs.readFileSync(config.str('output'), 'utf-8');
   }
 
   if (config.has('import')) {
     console.log('importing', config.str('import'));
-    // const inFile = fs.readFileSync(config.str('import'), 'utf-8');
-    // const imported = importCsv(inFile);
     // TODO: pass a re-readable stream?
     const imported = await importCsv(config.str('import'));
     console.log("IMPORTED!", imported.buys[0]);
+    if (outFile) {
+      outFile = mergeCsv(await importCsv(outFile), imported);
+    } else {
+      outFile = imported;
+    }
   }
 
   if (config.has('report')) {
