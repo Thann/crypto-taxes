@@ -11,7 +11,7 @@
     "watch": "babel lib -d dist --watch",
     "clean": "rm -f ./dist/*.js",
     "lint": "eslint lib/ test/ || exit 0",
-    "prepublish": "make babel",
+    "prepublish": "npm run babel",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [

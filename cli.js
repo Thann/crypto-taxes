@@ -11,8 +11,7 @@
 const fs = require('fs');
 const Config = require('bcfg');
 const reports = require('./lib/reports');
-const mergeCsv = require('./lib/merge-csv');
-const importCsv = require('./lib/import-csv');
+const { importCSV, mergeCSV, writeCSV } = require('./lib/csv-utils');
 
 const config = new Config('crypto-taxes', {
   alias: {
@@ -39,10 +38,12 @@ if (!config.has('output')) {
   if (config.has('import')) {
     console.log('importing', config.str('import'));
     // TODO: pass a re-readable stream?
-    const imported = await importCsv(config.str('import'));
+    const imported = await importCSV(config.str('import'));
     console.log("IMPORTED!", imported.buys[0]);
     if (outFile) {
-      outFile = mergeCsv(await importCsv(outFile), imported);
+      outFile = mergeCsv(await importCSV(outFile), imported);
+      // save outfile
+      writeCSV(outfile, config.str('output')); // dont await ;)
     } else {
       outFile = imported;
     }
