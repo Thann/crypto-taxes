@@ -39,7 +39,7 @@ if (!config.has('output')) {
     console.log('importing', config.str('import'));
     // TODO: pass a re-readable stream?
     const imported = await importCSV(config.str('import'));
-    console.log("IMPORTED!", imported.buys[0]);
+    // console.log("IMPORTED!", imported.BTC.buys[0]);
     if (outFile) {
       outFile = mergeCsv(await importCSV(outFile), imported);
       // save outfile
@@ -50,6 +50,6 @@ if (!config.has('output')) {
   }
 
   if (config.has('report')) {
-    reports[config.str('report')](outFile);
+    reports[config.str('report')](outFile, 'USD');
   }
 })();
