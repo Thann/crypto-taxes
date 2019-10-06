@@ -15,9 +15,10 @@ const { importCSV, mergeCSV, writeCSV } = require('./lib/csv-utils');
 
 const config = new Config('crypto-taxes', {
   alias: {
+    y: 'year',
     i: 'import',
     o: 'output',
-    r: 'report'
+    r: 'report',
   }
 });
 
@@ -38,12 +39,15 @@ if (!config.has('output')) {
   if (config.has('import')) {
     console.log('importing', config.str('import'));
     // TODO: pass a re-readable stream?
-    const imported = await importCSV(config.str('import'));
+    const imported = await importCSV(config.str('import'), {
+      year: config.str('year'),
+    });
     // console.log("IMPORTED!", imported.BTC.buys[0]);
     if (outFile) {
-      outFile = mergeCsv(await importCSV(outFile), imported);
-      // save outfile
-      writeCSV(outfile, config.str('output')); // dont await ;)
+      throw "not implemented!";
+      //outFile = mergeCsv(await importCSV(outFile), imported);
+      //// save outfile
+      //writeCSV(outfile, config.str('output')); // dont await ;)
     } else {
       outFile = imported;
     }
